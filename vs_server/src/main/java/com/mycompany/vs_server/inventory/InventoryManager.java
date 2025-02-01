@@ -29,4 +29,14 @@ public class InventoryManager {
         }
         return instance;
     }
+    
+    /*this method adds a product for the array  */
+    public void addProduct (String name,String id ){
+        Product p = new Product(name,id);     
+        productos.add(p);
+    }
+    
+    public void deleteProduct(){
+        
+    }
 }
