@@ -5,6 +5,8 @@
 package com.mycompany.vs_server.networkLayer;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.*;
@@ -21,6 +23,8 @@ public class TCPServer {
     }
     
     public void start(){
+        ExecutorService pool = Executors.newCachedThreadPool();
+        
         try {
             SSLServerSocketFactory socketFactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
             SSLServerSocket serverSocket = (SSLServerSocket)socketFactory.createServerSocket(port);
@@ -30,6 +34,8 @@ public class TCPServer {
                 //Accept connection 
                 SSLSocket clientSocket = (SSLSocket) serverSocket.accept();
                 System.out.println("Connected from: "+clientSocket.getInetAddress());
+                
+                pool.execute(new ClientHandler(clientSocket));
             }
         } catch (IOException ex) {
             Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
