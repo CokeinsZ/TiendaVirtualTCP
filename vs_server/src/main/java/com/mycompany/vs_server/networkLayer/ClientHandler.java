@@ -4,10 +4,24 @@
  */
 package com.mycompany.vs_server.networkLayer;
 
+import javax.net.ssl.SSLSocket;
+
 /**
  *
  * @author Alejandro Carvajal
  */
-public class ClientHandler {
+public class ClientHandler extends Thread {
+    private final SSLSocket clientSocket;
+
+    public ClientHandler(SSLSocket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
+
+    @Override
+    public void run() {
+        //
+    }
+    
+    
     
 }

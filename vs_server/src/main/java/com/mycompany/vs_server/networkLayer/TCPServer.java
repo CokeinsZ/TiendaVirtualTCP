@@ -4,10 +4,35 @@
  */
 package com.mycompany.vs_server.networkLayer;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.net.ssl.*;
+
 /**
  *
  * @author Alejandro Carvajal
  */
 public class TCPServer {
+    private int port;
+
+    public TCPServer(int port) {
+        this.port = port;
+    }
     
+    public void start(){
+        try {
+            SSLServerSocketFactory socketFactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
+            SSLServerSocket serverSocket = (SSLServerSocket)socketFactory.createServerSocket(port);
+            System.out.println("Server listing on port: "+port);
+            
+            while(true){
+                //Accept connection 
+                SSLSocket clientSocket = (SSLSocket) serverSocket.accept();
+                System.out.println("Connected from: "+clientSocket.getInetAddress());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
