@@ -16,7 +16,7 @@ import javax.net.ssl.*;
  * @author Alejandro Carvajal
  */
 public class TCPServer {
-    private int port;
+    private final int port;
 
     public TCPServer(int port) {
         this.port = port;

@@ -22,8 +22,7 @@ public class InventoryManager {
     
 
     public static synchronized InventoryManager getInstance() {
-        //This method is used to
-        
+        //This method is used to obtain de unique instance of the function        
         if (instance == null) {
             instance = new InventoryManager();
         }
