@@ -4,6 +4,8 @@
  */
 package com.mycompany.vs_server.inventory;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -104,5 +106,42 @@ public class InventoryManager {
                
     }
      
+      public synchronized String foundIdProductsbyName (String name){
+              Iterator<Product> iterator = productos.iterator();
+        while (iterator.hasNext()) {
+        Product product = iterator.next();
+        if (product.getId().equals(name)) {
+              System.out.println("Producto con el Nombre " + name + " ha sido encontrado.");
+            return product.getId();
+        }
+         System.out.println("Producto con el nombre " + name  + " no encontrado.");
+       
+        } return null;
+        }
+      
+       public void generateCSVReport(String fileName) {
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.append("ID,Name,Description,Price,Stock\n");  // columnas del csv
+
+            for (Product product : productos) {
+                writer.append(product.getId())
+                      .append(",")
+                      .append(product.getName())
+                      .append(",")
+                      .append(product.getDescription())
+                      .append(",")
+                      .append(product.getPrice())
+                      .append(",")
+                      .append(product.getStock())
+                      .append("\n");
+            }
+
+            System.out.println("CSV report generated successfully!");
+
+        } catch (IOException e) {
+            System.err.println("Error while generating CSV report: " + e.getMessage());
+        }
+    }
+
             
 }
