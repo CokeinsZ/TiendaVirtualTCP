@@ -5,13 +5,11 @@
 package com.mycompany.vs_server;
 
 import com.mycompany.vs_server.inventory.InventoryManager;
-import com.mycompany.vs_server.inventory.Product;
 import com.mycompany.vs_server.networkLayer.TCPServer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,12 +21,15 @@ import java.util.logging.Logger;
 public class Vs_server {
 
     public static void main(String[] args) {
-       
+        /*pruebas de datos reporte string y csv*/
         InventoryManager invMan =   InventoryManager.getInstance();
         invMan.addProduct("1", "aguacate", "descrpcionm 1", "10.000", "100");
         invMan.addProduct("2", "pasaqs", "descrpcionm 2", "20.000", "200");
         invMan.addProduct("3", "arroz C", "descrpcionm 3", "30.000", "300");
         System.out.println(""+ invMan.generateReport());
+        invMan.generateCSVReport("reporteProductosCSV.CSV");
+        
+        
         Properties p = new Properties();
         try {
             p.load(new FileInputStream(new File("properties.properties")));
