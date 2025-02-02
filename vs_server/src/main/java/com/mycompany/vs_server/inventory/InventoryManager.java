@@ -17,6 +17,7 @@ public class InventoryManager {
     private static InventoryManager instance;
     private ArrayList<Product> productos;
 
+    
     private InventoryManager() {
         //The constructor is private in order to prevent the creation of another instances
         this.productos = new ArrayList<>();
@@ -141,7 +142,28 @@ public class InventoryManager {
         } catch (IOException e) {
             System.err.println("Error while generating CSV report: " + e.getMessage());
         }
+       }
+        public String generateReport() {
+        String writer="" ;
+            writer= writer+("ID,Name,Description,Price,Stock\n");  // columnas del csv
+
+            for (Product product : productos) {
+                writer=writer +
+                      (product.getId())
+                      +(",")
+                      +(product.getName())
+                      +(",")
+                      +(product.getDescription())
+                      +(",")
+                      +(product.getPrice())
+                      +(",")
+                      +(product.getStock())
+                      +("\n");
+            }
+
+            System.out.println(" reporte generado");
+            return writer;
+        }
     }
 
             
-}
