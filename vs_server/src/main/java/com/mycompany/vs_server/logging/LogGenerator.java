@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  *
@@ -63,11 +62,11 @@ public class LogGenerator {
     }
     
     public void generateCSVReport() {
-        Path csvPath = Paths.get("audit_logs.csv");
+        Path reportPath = Paths.get("logs/audit_logs.csv");
         Path logDir = Paths.get("logs");
         
         try {
-            BufferedWriter writer = Files.newBufferedWriter(csvPath);
+            BufferedWriter writer = Files.newBufferedWriter(reportPath);
 
             // Escribir encabezado
             writer.write("Timestamp,ClientIP,Operation,Resource");
@@ -84,12 +83,19 @@ public class LogGenerator {
                     writer.newLine();
                 }
             }
+
+            writer.close();
             
         } catch (NoSuchFileException e) {
             System.err.println("Directorio de logs no encontrado");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
     
+    public static void main(String[] args) {
+        LogGenerator lg = LogGenerator.getInstance();
+        lg.generateCSVReport();
+    }
 }
