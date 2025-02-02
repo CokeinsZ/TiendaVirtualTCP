@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 public class Vs_server {
 
     public static void main(String[] args) {
+        
         Properties p = new Properties();
         try {
             p.load(new FileInputStream(new File("properties.properties")));
