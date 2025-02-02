@@ -16,10 +16,42 @@ public class Product {
     id as products id */
     private String name;
     private  String id ;
+    private String description;
+    private String price;
+    private String stock;
 
-    public Product(String name, String id) {
+    public Product(String name, String id, String description, String price, String stock) {
         this.name = name;
         this.id = id;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
+
+   
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String Stock) {
+        this.stock = Stock;
     }
 
     public String getId() {

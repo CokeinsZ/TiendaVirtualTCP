@@ -5,6 +5,7 @@
 package com.mycompany.vs_server.inventory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -30,12 +31,78 @@ public class InventoryManager {
     }
     
     /*this method adds a product for the array  */
-    public void addProduct (String name,String id ){
-        Product p = new Product(name,id);     
+    public  synchronized void addProduct (String name,String id, String price, String stock, String description){
+        Product p = new Product( name,  id,  description,  price,  stock);     
         productos.add(p);
     }
-    
-    public void deleteProduct(){
-        
+    /*this metodes deletes a product by id */
+    public synchronized void deleteProduct(String id){
+          Iterator<Product> iterator = productos.iterator();
+    while (iterator.hasNext()) {
+        Product product = iterator.next();
+        if (product.getId().equals(id)) {
+            iterator.remove();
+            System.out.println("Producto con la ID " + id + " ha sido borrado.");
+            return;
+        }
     }
+    System.out.println("Producto con la ID " + id + " no encontrado.");
+    }
+    
+    public synchronized void changeNameProuct (String id, String name ){
+         Iterator<Product> iterator = productos.iterator();
+        while (iterator.hasNext()) {
+        Product product = iterator.next();
+        if (product.getId().equals(id)) {
+            product.setName(name);
+            System.out.println("Producto con la ID " + id + " ha sido borrado.");
+            return;
+        }
+            System.out.println("Producto con la ID " + id + " no encontrado.");
+
+        }
+    }
+    
+     public synchronized void changeDescriptionProuct (String id, String name ){
+         Iterator<Product> iterator = productos.iterator();
+        while (iterator.hasNext()) {
+        Product product = iterator.next();
+        if (product.getId().equals(id)) {
+            product.setName(name);
+            System.out.println("Producto con la ID " + id + " ha sido borrado.");
+            return;
+        }
+            System.out.println("Producto con la ID " + id + " no encontrado.");
+
+        }
+        
+         
+     }
+     private synchronized Product foundProuct(String id){
+              Iterator<Product> iterator = productos.iterator();
+        while (iterator.hasNext()) {
+        Product product = iterator.next();
+        if (product.getId().equals(id)) {
+              System.out.println("Producto con la ID " + id + " ha sido encontrado.");
+            return product;
+        }
+         System.out.println("Producto con la ID " + id + " no encontrado.");
+       
+        } return null;
+        }
+     
+     public synchronized void changepriceProduct(String id, String price){
+         Product product = foundProuct(id);
+         product.setPrice(price);
+               
+    }
+     
+     
+      public synchronized void changeStockProduct(String id, String stock){
+         Product product = foundProuct(id);
+         product.setPrice(stock);
+               
+    }
+     
+            
 }
