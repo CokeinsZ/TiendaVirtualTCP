@@ -9,6 +9,7 @@ import com.mycompany.vs_server.logging.LogGenerator;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLSocket;
@@ -31,29 +32,58 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        DataInputStream inputStream = null;
         try {
             String clientIP = clientSocket.getInetAddress().toString();
-            
-            inputStream = new DataInputStream(clientSocket.getInputStream());
+            System.out.println("Connected from: " + clientIP);
+
+            DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+
+            while (true) {
+                String clientMessage;
+                try {
+                    System.out.println("Esperando mensaje...");
+                    clientMessage = inputStream.readUTF();
+                    
+                } catch (IOException e) {
+                    System.out.println("Cliente desconectado: " + clientIP);
+                    break; // Salir del bucle cuando el cliente se desconecta
+                }
+
+                System.out.println("Client message: " + clientMessage);
+                String[] parts = clientMessage.trim().split(":");
+
+                String response = processCommand(parts, clientIP);
+                outputStream.writeUTF(response);
+                outputStream.flush();
+            }
             
-            String clientMessage = inputStream.readUTF();
-            System.out.println("Client message: "+clientMessage);
-            clientMessage = clientMessage.trim();
-            String[] parts = clientMessage.split(":");
+        } catch (SocketException ex) {
+            System.out.println("Conexión reseteada por el cliente.");
             
-            String response = processCommand(parts, clientIP);
-            outputStream.writeUTF(response);
-        
         } catch (IOException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, "Error en la comunicación", ex);
+            
+        } finally {
+            try {
+                clientSocket.close();
+                System.out.println("Conexión cerrada con el cliente: " + clientSocket.getInetAddress().toString());
+                
+            } catch (IOException ex) {
+                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, "Error al cerrar el socket", ex);
+            }
         }
     }
+
+    
+    
     
     private String processCommand(String[] command, String clientIP) {
         try {
             switch (command[0].toUpperCase()) {
+                case "HI":
+                    return "SUCCES:Hola " + clientIP;
+                    
                 case "ADD":
                     //Codigo para agregar un producto
                     //Codigo para generar el log

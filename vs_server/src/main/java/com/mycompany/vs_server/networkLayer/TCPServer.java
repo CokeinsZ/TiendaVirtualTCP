@@ -33,7 +33,6 @@ public class TCPServer {
             while(true){
                 //Accept connection 
                 SSLSocket clientSocket = (SSLSocket) serverSocket.accept();
-                System.out.println("Connected from: "+clientSocket.getInetAddress());
                 
                 pool.execute(new ClientHandler(clientSocket));
             }

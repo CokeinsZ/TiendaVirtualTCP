@@ -38,7 +38,7 @@ public class Vs_client {
         System.setProperty("javax.net.ssl.trustStorePassword", sslPassword);
         System.setProperty("javax.net.ssl.trustStoreType", "PKCS12");
        
-        TCPClient client = new TCPClient("192.168.194.17", 9090);
+        TCPClient client = new TCPClient("192.168.194.35", 9090);
         MainWindow mainWindow = new MainWindow(client);
         mainWindow.setVisible(true);
     }

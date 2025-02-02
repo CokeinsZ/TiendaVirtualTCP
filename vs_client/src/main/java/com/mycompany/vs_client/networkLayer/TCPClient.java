@@ -7,6 +7,8 @@ package com.mycompany.vs_client.networkLayer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -51,4 +53,25 @@ public class TCPClient {
         
     }
     
+    public String sendRequest(String command, String id, String price, String stock) {
+        String response = "ERROR";
+        StringBuilder sb = new StringBuilder();
+            sb.append(command);
+            if (id != null)
+                sb.append(":").append(id);
+            if (price != null)
+                sb.append(":").append(price);
+            if (stock != null)
+                sb.append(":").append(stock);
+            
+        try {
+            outputStream.writeUTF(sb.toString());
+            response = inputStream.readUTF();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(TCPClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response;
+    }
 }
