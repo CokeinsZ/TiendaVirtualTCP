@@ -79,20 +79,60 @@ public class ClientHandler extends Thread {
     
     
     private String processCommand(String[] command, String clientIP) {
+        String response;
         try {
             switch (command[0].toUpperCase()) {
                 case "HI":
                     return "SUCCES:Hola " + clientIP;
                     
                 case "ADD":
-                    //Codigo para agregar un producto
-                    //Codigo para generar el log
-                    return "SUCCESS:Producto añadido";
+                    response = inventoryManager.addProduct(command[1], command[2], command[3], command[4], command[5]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "ADD", command[2]);
+                    
+                    return response;
                     
                 case "DELETE":
-                    //Codigo para eliminar un producto
-                    //Codigo para generar el log
-                    return "SUCCESS:Producto eliminado";
+                    response = inventoryManager.deleteProduct(command[1]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "DELETE", command[1]);
+                    
+                    return response;
+                    
+                case "UPDATE_NAME":
+                    response = inventoryManager.changeNameProuct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_NAME", command[1]);
+                    
+                    return response;
+                    
+                case "UPDATE_DESCRIPTION":
+                    response = inventoryManager.changeDescriptionProuct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_DESCRIPTION", command[1]);
+                    
+                    return response;
+                    
+                case "UPDATE_STOCK":
+                    response = inventoryManager.changeStockProduct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_STOCK", command[1]);
+                    
+                    return response;
+                    
+                case "UPDATE_PRICE":
+                    response = inventoryManager.changePriceProduct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_PRICE", command[1]);
+                    
+                    return response;
+                    
+                case "SEARCH_NAME":
+                    response = inventoryManager.foundIdProductsbyName(response);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_NAME", command[1]);
+                    
+                    return response;
                     
                 // ... otros comandos (UPDATE, SEARCH, REPORT)
                 default:

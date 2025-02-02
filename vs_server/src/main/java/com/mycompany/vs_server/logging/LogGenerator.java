@@ -93,9 +93,5 @@ public class LogGenerator {
         }
         
     }
-    
-    public static void main(String[] args) {
-        LogGenerator lg = LogGenerator.getInstance();
-        lg.generateCSVReport();
-    }
+
 }
