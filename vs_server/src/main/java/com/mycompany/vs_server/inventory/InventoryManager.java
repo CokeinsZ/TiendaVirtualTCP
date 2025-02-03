@@ -128,28 +128,19 @@ public class InventoryManager {
             }
         }
         
-        if (productsFound.size() == 0) {
+        if (productsFound.isEmpty()) {
             return null;
         }
         
         return productsFound;
     }
       
-       public void generateCSVReport(String fileName) {
+    public void generateCSVReport(String fileName) {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.append("ID,Name,Description,Price,Stock\n");  // columnas del csv
 
             for (Product product : productos) {
-                writer.append(product.getId())
-                      .append(",")
-                      .append(product.getName())
-                      .append(",")
-                      .append(product.getDescription())
-                      .append(",")
-                      .append(product.getPrice())
-                      .append(",")
-                      .append(product.getStock())
-                      .append("\n");
+                writer.append(product.toString());
             }
 
             System.out.println("CSV report generated successfully!");
@@ -157,28 +148,33 @@ public class InventoryManager {
         } catch (IOException e) {
             System.err.println("Error while generating CSV report: " + e.getMessage());
         }
-       }
-        public String generateReport() {
-        String writer="" ;
-            writer= writer+("ID,Name,Description,Price,Stock\n");  // columnas del csv
-
-            for (Product product : productos) {
-                writer=writer +
-                      (product.getId())
-                      +(",")
-                      +(product.getName())
-                      +(",")
-                      +(product.getDescription())
-                      +(",")
-                      +(product.getPrice())
-                      +(",")
-                      +(product.getStock())
-                      +("\n");
-            }
-
-            System.out.println(" reporte generado");
-            return writer;
-        }
     }
+    
+    public String generateReport() {
+        String writer= "";
+        writer = writer + ("ID,Name,Description,Price,Stock\n");  // columnas del csv
+
+        for (Product product : productos) {
+            writer = writer + product.toString();                      
+        }
+
+        System.out.println(" reporte generado");
+        return writer;
+    }
+    
+    public ArrayList<Product> getProductsPaginated(int page, int pageSize) {
+        int totalProducts = productos.size();
+
+        int fromIndex = page * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, totalProducts);
+
+        if (fromIndex >= totalProducts) {
+            return new ArrayList<>(); // No hay más productos
+        }
+
+        return new ArrayList<Product>(productos.subList(fromIndex, toIndex));
+    }
+
+}
 
             

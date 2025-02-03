@@ -70,6 +70,18 @@ public class Product {
         this.name = name;
     }
     
-    
+    @Override
+    public String toString() {
+        return this.getId() 
+                + (":")
+                + (this.name)
+                + (":")
+                + (this.description)
+                + (":")
+                + (this.price)
+                + (":")
+                + (this.stock)
+                + ("\n");
+    }
     
 }

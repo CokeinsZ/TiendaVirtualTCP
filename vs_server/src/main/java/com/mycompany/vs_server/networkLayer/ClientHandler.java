@@ -5,11 +5,13 @@
 package com.mycompany.vs_server.networkLayer;
 
 import com.mycompany.vs_server.inventory.InventoryManager;
+import com.mycompany.vs_server.inventory.Product;
 import com.mycompany.vs_server.logging.LogGenerator;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLSocket;
@@ -39,12 +41,17 @@ public class ClientHandler extends Thread {
             DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
 
+            // Enviar los primero 10 productos al conectarse
+            String initialProducts = buildProductsResponse(inventoryManager.getProductsPaginated(0, 10));
+            outputStream.writeUTF(initialProducts);
+            outputStream.flush();
+            
             while (true) {
                 String clientMessage;
                 try {
                     System.out.println("Esperando mensaje...");
                     clientMessage = inputStream.readUTF();
-                    
+                                        
                 } catch (IOException e) {
                     System.out.println("Cliente desconectado: " + clientIP);
                     break; // Salir del bucle cuando el cliente se desconecta
@@ -128,19 +135,53 @@ public class ClientHandler extends Thread {
                     return response;
                     
                 case "SEARCH_NAME":
-                    response = inventoryManager.foundIdProductsbyName(response);
-                    if (response.contains("SUCCES")) 
+                    ArrayList<Product> foundProducts = inventoryManager.foundProductsbyName(command[1]);
+                    
+                    if (foundProducts != null) {
+                        response = buildProductsResponse(foundProducts);
                         logger.log(clientIP, "UPDATE_NAME", command[1]);
+                    
+                    } else {
+                        response = "ERROR:No products found";
+                        
+                    }
                     
                     return response;
                     
-                // ... otros comandos (UPDATE, SEARCH, REPORT)
+                case "REPORT":
+                    return inventoryManager.generateReport();
+
+                case "LIST_PAGE":
+                    try {
+                        int page = Integer.parseInt(command[1]);
+                        ArrayList<Product> paginatedProducts = inventoryManager.getProductsPaginated(page, 10);
+                        
+                        if (paginatedProducts.isEmpty()) {
+                            return "ERROR:No more products available";
+                        }
+                        
+                        return buildProductsResponse(paginatedProducts);
+                    
+                    } catch (NumberFormatException e) {
+                        return "ERROR:Invalid page number";
+                    }
+
                 default:
                     return "ERROR:Comando no reconocido";
             }
         } catch (Exception e) {
             return "ERROR:" + e.getMessage();
         }
+    }
+
+    private String buildProductsResponse(ArrayList<Product> products) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (Product foundProduct : products) {
+            sb.append(foundProduct.toString());
+        }
+    
+        return sb.toString();
     }
     
     
