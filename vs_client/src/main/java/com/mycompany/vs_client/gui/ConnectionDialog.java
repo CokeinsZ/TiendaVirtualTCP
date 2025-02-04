@@ -4,6 +4,8 @@
  */
 package com.mycompany.vs_client.gui;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Alejandro Carvajal
@@ -92,7 +94,15 @@ public class ConnectionDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAceptarActionPerformed
+          Vs_CrudProduct vsProduct= new Vs_CrudProduct();
+         this.getContentPane().add(vsProduct);
+    
+    // Refresh the JFrame
+    this.validate();
+    this.repaint();
         control = true;
+     
+       
         dispose();
     }//GEN-LAST:event_bAceptarActionPerformed
 

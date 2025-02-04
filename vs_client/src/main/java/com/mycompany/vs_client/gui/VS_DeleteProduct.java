@@ -8,12 +8,12 @@ package com.mycompany.vs_client.gui;
  *
  * @author USER
  */
-public class VS_DeleteProduct extends javax.swing.JPanel {
+public class Vs_DeleteProduct extends javax.swing.JPanel {
 
     /**
      * Creates new form VS_DeleteProduct
      */
-    public VS_DeleteProduct() {
+    public Vs_DeleteProduct() {
         initComponents();
     }
 

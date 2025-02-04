@@ -8,12 +8,12 @@ package com.mycompany.vs_client.gui;
  *
  * @author USER
  */
-public class VS_CrudProduct extends javax.swing.JPanel {
+public class Vs_CrudProduct extends javax.swing.JPanel {
 
     /**
      * Creates new form VS_CrudProduct
      */
-    public VS_CrudProduct() {
+    public Vs_CrudProduct() {
         initComponents();
     }
 
@@ -47,6 +47,11 @@ public class VS_CrudProduct extends javax.swing.JPanel {
         jButton2.setText("generate inventory");
 
         jButton3.setText("Search");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Exit");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -105,6 +110,11 @@ public class VS_CrudProduct extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here
+       Vs_DeleteProduct vsDelete = new Vs_DeleteProduct();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
