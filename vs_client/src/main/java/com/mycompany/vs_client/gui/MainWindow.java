@@ -15,6 +15,10 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Alejandro Carvajal
  */
+
+/**
+ * represents the dialog to main menu and options whit the inventory 
+ */
 public class MainWindow extends javax.swing.JFrame {
 
     private TCPClient tcpClient;

@@ -11,6 +11,10 @@ import javax.swing.JTextField;
  *
  * @author Alejandro Carvajal
  */
+
+/**
+ * represents the dialog to delete a new product on inventory 
+ */
 public class DeleteDialog extends javax.swing.JDialog {
 
     private boolean control;

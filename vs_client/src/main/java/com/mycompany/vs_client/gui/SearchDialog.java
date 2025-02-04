@@ -12,6 +12,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Alejandro Carvajal
  */
+/**
+ * represents the dialog to search  product on inventory 
+ */
 public class SearchDialog extends javax.swing.JDialog {
     
     private byte control;

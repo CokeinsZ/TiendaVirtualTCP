@@ -8,6 +8,10 @@ package com.mycompany.vs_client.gui;
  *
  * @author Alejandro Carvajal
  */
+
+/**
+ * represents the main dialog to enter to the server 
+ */
 public class ConnectionDialog extends javax.swing.JDialog {
 
     private boolean control;

@@ -10,6 +10,10 @@ import javax.swing.JOptionPane;
  *
  * @author Alejandro Carvajal
  */
+
+/**
+ * represents the dialog to edit  a  product on inventory 
+ */
 public class UpdateDialog extends javax.swing.JDialog {
 
     private boolean control;

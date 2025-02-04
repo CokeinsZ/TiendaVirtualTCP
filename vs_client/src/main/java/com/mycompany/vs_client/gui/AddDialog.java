@@ -9,6 +9,11 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Alejandro Carvajal
+ * @author Jhonatan Chica
+ */
+
+/**
+ * represents the dialog to add a new product on inventory 
  */
 public class AddDialog extends javax.swing.JDialog {
     
