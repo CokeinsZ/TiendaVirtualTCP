@@ -84,4 +84,17 @@ public class Product {
                 + ("\n");
     }
     
+    public String toString(String separator) {
+        return this.getId() 
+                + (separator)
+                + (this.name)
+                + (separator)
+                + (this.description)
+                + (separator)
+                + (this.price)
+                + (separator)
+                + (this.stock)
+                + ("\n");
+    }
+    
 }

@@ -5,8 +5,11 @@
 package com.mycompany.vs_client.gui;
 
 import com.mycompany.vs_client.networkLayer.TCPClient;
+import java.io.DataInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,10 +23,12 @@ public class MainWindow extends javax.swing.JFrame {
      * @param tcpClient control the communication with the server
      */
     public MainWindow(TCPClient tcpClient) {
+        setLocationRelativeTo(null);
         initComponents();
         this.tcpClient = tcpClient;
         
         showConectionDialog();
+        loadProducts(1);
     }
     
     private void showConectionDialog() {
@@ -38,8 +43,11 @@ public class MainWindow extends javax.swing.JFrame {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al conectar con el servidor: " + ex.getMessage(),
                         "Error de Conexión", JOptionPane.ERROR_MESSAGE);
+                
+                System.exit(1);
             }
         }
+       
     }
 
 
@@ -52,68 +60,350 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        bAddProduct = new javax.swing.JButton();
+        bSearchProduct = new javax.swing.JButton();
+        bUpdateProduct = new javax.swing.JButton();
+        bDeleteProduct = new javax.swing.JButton();
+        bGenereateReport = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        lResponse = new javax.swing.JLabel();
+        bPreviousPage = new javax.swing.JButton();
+        bNextPage = new javax.swing.JButton();
+        lPageNumber = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        productTable = new javax.swing.JTable();
+        bGenereateLogsReport = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Saludar: ");
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bAddProduct.setText("ADD");
+        bAddProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bAddProductActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Respuesta: ");
+        bSearchProduct.setText("SEARCH");
+        bSearchProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSearchProductActionPerformed(evt);
+            }
+        });
 
-        lResponse.setText("jLabel3");
+        bUpdateProduct.setText("UPDATE");
+        bUpdateProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUpdateProductActionPerformed(evt);
+            }
+        });
+
+        bDeleteProduct.setText("DELETE");
+        bDeleteProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDeleteProductActionPerformed(evt);
+            }
+        });
+
+        bGenereateReport.setText("INVENTORY REPORT");
+        bGenereateReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bGenereateReportActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jLabel1.setText("INVENTORY MANAGER");
+
+        bPreviousPage.setText("<");
+        bPreviousPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bPreviousPageActionPerformed(evt);
+            }
+        });
+
+        bNextPage.setText(">");
+        bNextPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bNextPageActionPerformed(evt);
+            }
+        });
+
+        lPageNumber.setText("1");
+
+        productTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(productTable);
+
+        bGenereateLogsReport.setText("LOGS REPORT");
+        bGenereateLogsReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bGenereateLogsReportActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(215, 215, 215))
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(22, 22, 22)
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lResponse, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(bPreviousPage, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lPageNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bNextPage, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(bDeleteProduct, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(bUpdateProduct, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(bSearchProduct, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(bAddProduct, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(36, 36, 36))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(bGenereateReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(bGenereateLogsReport, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(bAddProduct)
+                        .addGap(18, 18, 18)
+                        .addComponent(bSearchProduct)
+                        .addGap(18, 18, 18)
+                        .addComponent(bUpdateProduct)
+                        .addGap(18, 18, 18)
+                        .addComponent(bDeleteProduct)
+                        .addGap(138, 138, 138)
+                        .addComponent(bGenereateLogsReport)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bGenereateReport))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(lResponse))
-                .addContainerGap(174, Short.MAX_VALUE))
+                    .addComponent(bPreviousPage)
+                    .addComponent(lPageNumber)
+                    .addComponent(bNextPage))
+                .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String response = tcpClient.sendRequest("HI", null, null, null);
-        lResponse.setText(response);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void bAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddProductActionPerformed
+        AddDialog addDialog = new AddDialog(this, true);
+        addDialog.setVisible(true);
+        
+        String id = addDialog.getlId();
+        String name = addDialog.getlName();
+        String description = addDialog.getlDescription();
+        String price = addDialog.getlPrice();
+        String stock = addDialog.getlStock();
+        
+        String response;
+        
+        if(id.isBlank())
+            response = tcpClient.sendRequest("ADD_DEFAULT_ID", null, name, description, price, stock);
+        else
+            response = tcpClient.sendRequest("ADD", id, name, description, price, stock);
+        
+        informResponse(response);
+        
+        loadProducts(Integer.parseInt(lPageNumber.getText()));
+    }//GEN-LAST:event_bAddProductActionPerformed
+
+    private void bGenereateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGenereateReportActionPerformed
+        try {
+            // Enviar la solicitud al servidor
+            String response = tcpClient.sendRequest("INVENTORY_REPORT", null, null, null, null, null);
+            System.out.println(response);
+            // Si el servidor indica que enviará el archivo
+            if ("SENDING_FILE".equals(response)) {
+                response = tcpClient.receiveFile("reports/report.csv");
+                
+                if (response.contains("Error"))
+                    JOptionPane.showMessageDialog(null, response, "ERROR", JOptionPane.ERROR_MESSAGE);
+                
+                else
+                    JOptionPane.showMessageDialog(null, response, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al generar el reporte: " + response, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error en la conexión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_bGenereateReportActionPerformed
+
+    
+    private void bPreviousPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPreviousPageActionPerformed
+        int pageNumber = Integer.parseInt(lPageNumber.getText());
+        if (pageNumber == 1)
+            return;
+        
+        loadProducts(pageNumber-1);
+        lPageNumber.setText(""+(pageNumber-1));
+    }//GEN-LAST:event_bPreviousPageActionPerformed
+
+    private void bNextPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNextPageActionPerformed
+        int pageNumber = Integer.parseInt(lPageNumber.getText());
+        
+        loadProducts(pageNumber+1);
+        lPageNumber.setText(""+(pageNumber+1));
+    }//GEN-LAST:event_bNextPageActionPerformed
+
+    private void bSearchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSearchProductActionPerformed
+        SearchDialog searchDialog = new SearchDialog(this, true);
+        searchDialog.setVisible(true);
+        
+        if (searchDialog.getControl() == 0) {
+            return;
+        }
+        
+        String nameSeach = searchDialog.getTNameSearch();
+        
+        String response = tcpClient.sendRequest("SEARCH_NAME", null, nameSeach, null, null, null);
+        searchDialog = new SearchDialog(this, true, response);
+        searchDialog.setVisible(true);
+        
+        if (searchDialog.getControl() == SearchDialog.DELETE) {
+            bDeleteProductActionPerformed(null);
+        
+        } else if (searchDialog.getControl() == SearchDialog.UPDATE) {
+            bUpdateProductActionPerformed(null);
+        }
+        
+    }//GEN-LAST:event_bSearchProductActionPerformed
+
+    private void bDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteProductActionPerformed
+        DeleteDialog deleteDialog = new DeleteDialog(this, true);
+        deleteDialog.setVisible(true);
+        
+        if (!deleteDialog.getControl())
+            return;
+        
+        String id = deleteDialog.getlId();
+        
+        String response = tcpClient.sendRequest("DELETE", id, null, null, null, null);
+        informResponse(response);
+        
+        loadProducts(Integer.parseInt(lPageNumber.getText()));
+    }//GEN-LAST:event_bDeleteProductActionPerformed
+
+    private void bUpdateProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateProductActionPerformed
+        UpdateDialog updateDialog = new UpdateDialog(this, true);
+        updateDialog.setVisible(true);
+        
+        if (!updateDialog.getControl()) 
+            return;
+        
+        String id = updateDialog.getlId();
+        String name = updateDialog.getlName();
+        String description = updateDialog.getlDescription();
+        String price = updateDialog.getlPrice();
+        String stock = updateDialog.getlStock();
+        
+        String response = tcpClient.sendRequest("UPDATE", id, name, description, price, stock);
+        informResponse(response);
+        
+        loadProducts(Integer.parseInt(lPageNumber.getText()));
+    }//GEN-LAST:event_bUpdateProductActionPerformed
+
+    private void bGenereateLogsReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGenereateLogsReportActionPerformed
+        String response = tcpClient.sendRequest("LOGS_REPORT", null, null, null, null, null);
+        informResponse(response);
+    }//GEN-LAST:event_bGenereateLogsReportActionPerformed
+
+    private void loadProducts(int page) {
+        String response = tcpClient.sendRequest("LIST_PAGE", "" + page, null, null, null, null);
+        String[] productos = response.trim().split("\n"); // Separar por líneas
+
+        // Definir los títulos de las columnas
+        String[] columnNames = {"Id", "Nombre", "Precio", "Stock"};
+
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        for (String producto : productos) {
+            String[] partes = producto.split(":");
+            if (partes.length >= 5) {
+                Object[] rowData = {partes[0], partes[1], partes[3], partes[4]};
+                model.addRow(rowData); // Agregar fila a la tabla
+            
+            } else if (partes.length == 2) { // Asegurar que tiene suficientes datos
+                Object[] rowData = {partes[0], partes[1]};
+                model.addRow(rowData); // Agregar fila a la tabla
+            }
+        }
+
+        productTable.setModel(model); // Asignar el modelo al JTable
+    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton bAddProduct;
+    private javax.swing.JButton bDeleteProduct;
+    private javax.swing.JButton bGenereateLogsReport;
+    private javax.swing.JButton bGenereateReport;
+    private javax.swing.JButton bNextPage;
+    private javax.swing.JButton bPreviousPage;
+    private javax.swing.JButton bSearchProduct;
+    private javax.swing.JButton bUpdateProduct;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel lResponse;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lPageNumber;
+    private javax.swing.JTable productTable;
     // End of variables declaration//GEN-END:variables
+
+    private void informResponse(String response) {
+        if (response.contains("ERROR")) {
+            JOptionPane.showMessageDialog(this, response, "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, response, "SUCCES", JOptionPane.INFORMATION_MESSAGE);
+        }
+    
+    }
 }

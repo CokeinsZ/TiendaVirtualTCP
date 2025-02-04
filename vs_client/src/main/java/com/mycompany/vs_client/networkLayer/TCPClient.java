@@ -6,6 +6,7 @@ package com.mycompany.vs_client.networkLayer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,16 +54,20 @@ public class TCPClient {
         
     }
     
-    public String sendRequest(String command, String id, String price, String stock) {
+    public String sendRequest(String command, String id, String name, String description, String price, String stock) {
         String response = "ERROR";
         StringBuilder sb = new StringBuilder();
-            sb.append(command);
-            if (id != null)
-                sb.append(":").append(id);
-            if (price != null)
-                sb.append(":").append(price);
-            if (stock != null)
-                sb.append(":").append(stock);
+        sb.append(command);
+        if (id != null)
+            sb.append(":").append(id);
+        if (name != null)
+            sb.append(":").append(name);
+        if (description != null)
+            sb.append(":").append(description);
+        if (price != null)
+            sb.append(":").append(price);
+        if (stock != null)
+            sb.append(":").append(stock);
             
         try {
             outputStream.writeUTF(sb.toString());
@@ -74,4 +79,32 @@ public class TCPClient {
         
         return response;
     }
+
+    public String receiveFile(String fileName) {
+        try {
+            // Leer el tamaño del archivo
+            long fileSize = inputStream.readLong();
+            System.out.println("Recibiendo archivo de tamaño: " + fileSize + " bytes");
+
+            // Crear para guardar el archivo
+            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+
+            // Leer los bytes del archivo y escribirlos en el archivo local
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            long totalBytesRead = 0;
+
+            while (totalBytesRead < fileSize && (bytesRead = inputStream.read(buffer)) != -1) {
+                fileOutputStream.write(buffer, 0, bytesRead);
+                totalBytesRead += bytesRead;
+            }
+
+            fileOutputStream.close();
+            return "Archivo recibido y guardado como " + fileName;
+
+        } catch (IOException e) {
+            return "Error al recibir el archivo: " + e.getMessage();
+        }
+    }
+
 }

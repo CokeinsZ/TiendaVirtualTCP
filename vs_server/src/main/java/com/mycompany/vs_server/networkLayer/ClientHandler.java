@@ -9,6 +9,8 @@ import com.mycompany.vs_server.inventory.Product;
 import com.mycompany.vs_server.logging.LogGenerator;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -23,7 +25,8 @@ import javax.net.ssl.SSLSocket;
 public class ClientHandler extends Thread {
     private final SSLSocket clientSocket;
     private final InventoryManager inventoryManager;
-    private final LogGenerator logger;            
+    private final LogGenerator logger;
+    private File csvReport;
 
     public ClientHandler(SSLSocket clientSocket) {
         this.clientSocket = clientSocket;
@@ -40,11 +43,6 @@ public class ClientHandler extends Thread {
 
             DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
-
-            // Enviar los primero 10 productos al conectarse
-            String initialProducts = buildProductsResponse(inventoryManager.getProductsPaginated(0, 10));
-            outputStream.writeUTF(initialProducts);
-            outputStream.flush();
             
             while (true) {
                 String clientMessage;
@@ -61,8 +59,17 @@ public class ClientHandler extends Thread {
                 String[] parts = clientMessage.trim().split(":");
 
                 String response = processCommand(parts, clientIP);
-                outputStream.writeUTF(response);
-                outputStream.flush();
+                
+                if (response.contains("SENDING_FILE")) {
+                    outputStream.writeUTF(response);
+                    outputStream.flush();
+                    sendFile(outputStream);
+                
+                } else {
+                    outputStream.writeUTF(response);
+                    outputStream.flush();
+                }
+                
             }
             
         } catch (SocketException ex) {
@@ -82,9 +89,6 @@ public class ClientHandler extends Thread {
         }
     }
 
-    
-    
-    
     private String processCommand(String[] command, String clientIP) {
         String response;
         try {
@@ -95,7 +99,21 @@ public class ClientHandler extends Thread {
                 case "ADD":
                     response = inventoryManager.addProduct(command[1], command[2], command[3], command[4], command[5]);
                     if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "ADD", command[1]);
+                    
+                    return response;
+                    
+                case "ADD_DEFAULT_ID":
+                    response = inventoryManager.addProduct(command[1], command[2], command[3], command[4]);
+                    if (response.contains("SUCCES")) 
                         logger.log(clientIP, "ADD", command[2]);
+                    
+                    return response;
+                    
+                case "UPDATE":
+                    response = inventoryManager.changeProduct(command[1], command[2], command[3], command[4], command[5]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE", command[1]);
                     
                     return response;
                     
@@ -148,8 +166,13 @@ public class ClientHandler extends Thread {
                     
                     return response;
                     
-                case "REPORT":
-                    return inventoryManager.generateReport();
+                case "INVENTORY_REPORT":
+                    this.csvReport = inventoryManager.generateCSVReport("reports/inventoryReport");
+                    return "SENDING_FILE";
+                    
+                case "LOGS_REPORT":
+                    logger.generateCSVReport();
+                    return "SUCCES:Report saved in the server. Admins can access it";
 
                 case "LIST_PAGE":
                     try {
@@ -183,6 +206,38 @@ public class ClientHandler extends Thread {
     
         return sb.toString();
     }
+
+    private void sendFile(DataOutputStream outputStream) {
+        if (csvReport == null || !csvReport.exists()) {
+            try {
+                outputStream.writeUTF("ERROR: No CSV file found");
+                outputStream.flush();
+            } catch (IOException e) {
+                System.err.println("Error sending file error message: " + e.getMessage());
+            }
+            return;
+        }
+
+        try (FileInputStream fileInputStream = new FileInputStream(csvReport)) {
+            // Enviar tamaño del archivo
+            outputStream.writeLong(csvReport.length());
+            outputStream.flush();
+
+            // Enviar archivo en bloques
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.flush();
+
+            System.out.println("CSV file sent successfully.");
+
+        } catch (IOException e) {
+            System.err.println("Error while sending CSV file: " + e.getMessage());
+        }
+    }
+
     
     
     
