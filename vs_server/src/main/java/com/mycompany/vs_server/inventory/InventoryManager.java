@@ -11,13 +11,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *
+ * @author Jhonatan Chica
  * @author Alejandro Carvajal
  */
 public class InventoryManager {
     private static InventoryManager instance;
     private ArrayList<Product> productos;
 
+   /**
+ * Constructor to create a new inventory manager using in create instance.
+ *
+ */
     private InventoryManager() {
         //The constructor is private in order to prevent the creation of another instances
         this.productos = new ArrayList<>();
@@ -43,7 +47,9 @@ public class InventoryManager {
     }
     
     
-    /*this method adds a product for the array  */
+   /** this method adds a product for the array  
+     *  @return String messaga whit the result of operation .
+    */
     public synchronized String addProduct (String id, String name, String description, String price, String stock){
         if (foundProuct(id) != null) {
             return "ERROR:Product with id: " + id + " already exist";
@@ -54,6 +60,9 @@ public class InventoryManager {
         return("SUCCES:Product added");
     }
     
+    /** this method adds a product for the array  whitout id
+     *  @return String messaga whit the result of operation .
+    */
     public synchronized String addProduct (String name, String description, String price, String stock){        
         //Busqueda del id disponible
         String id = ""+(productos.size()+1);
@@ -68,7 +77,9 @@ public class InventoryManager {
         return("SUCCES:Product added");
     }
     
-    /*this metodes deletes a product by id */
+    /** this metodes deletes a product by id 
+    * @return String messaga whit the result of operation .
+    */
     public synchronized String deleteProduct(String id){
         Iterator<Product> iterator = productos.iterator();
         while (iterator.hasNext()) {
@@ -81,7 +92,9 @@ public class InventoryManager {
         
         return "ERROR:Product with ID " + id + " not found.";
     }
-    
+    /** this metodes changes the name of  a product by id 
+    * @return String messaga whit the result of operation .
+    */
     public synchronized String changeNameProuct (String id, String name ){
         Iterator<Product> iterator = productos.iterator();
         while (iterator.hasNext()) {
@@ -94,7 +107,9 @@ public class InventoryManager {
         
         return "ERROR:Product with ID: " + id + " not found";
     }
-    
+    /** this metodes changes the description of  a product by id 
+    * @return String messaga whit the result of operation .
+    */
     public synchronized String changeDescriptionProuct (String id, String description ){
         Iterator<Product> iterator = productos.iterator();
         while (iterator.hasNext()) {
@@ -107,7 +122,9 @@ public class InventoryManager {
         
         return "ERROR:Product with ID: " + id + " not found";
     }
-    
+     /** this metodes changes the description of  a product by id 
+    * @return Product  product found .
+    */
     private synchronized Product foundProuct(String id){
         Iterator<Product> iterator = productos.iterator();
         while (iterator.hasNext()) {
@@ -120,7 +137,9 @@ public class InventoryManager {
         
         return null;
     }
-     
+      /** this metodes changes the price of  a product by id 
+    * @return String messaga whit the result of operation .
+    */
     public synchronized String changePriceProduct(String id, String price){
         Product product = foundProuct(id);
         if (product != null) {
@@ -131,7 +150,9 @@ public class InventoryManager {
         return "ERROR:Product with ID: " + id + " not found";               
     }
      
-     
+       /** this metodes changes the stock of  a product by id 
+    * @return String messaga whit the result of operation .
+    */
     public synchronized String changeStockProduct(String id, String stock){
         Product product = foundProuct(id);
         if (product != null) {
@@ -141,7 +162,9 @@ public class InventoryManager {
         
         return "ERROR:Product with ID: " + id + " not found";
     }
-     
+      /** this metodes found multiples produscts whit the same name
+    * @return array Products found
+    */
     public synchronized ArrayList<Product> foundProductsbyName (String name){
         Iterator<Product> iterator = productos.iterator();
         ArrayList<Product> productsFound = new ArrayList<>();
@@ -201,7 +224,10 @@ public class InventoryManager {
 
         return new ArrayList<>(productos.subList(fromIndex, toIndex));
     }
-
+    /** 
+    * this metodes changes multiples atributes  of the product
+    * @return  String messaga whit the result of operation .
+    */
     public String changeProduct(String id, String name, String description, String price, String stock) {
         Product product = foundProuct(id);
         if (product != null) {

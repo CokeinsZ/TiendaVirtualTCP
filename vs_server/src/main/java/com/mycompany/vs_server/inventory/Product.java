@@ -19,6 +19,14 @@ public class Product {
     private String description;
     private String price;
     private String stock;
+/**
+ * Constructor to create a new product.
+ * @param name The name of the product.
+ * @param stock The  avalability of the product.
+ * @param id The name of the product.
+ * @param description The name of the product.
+ * @param price The name of the product.
+ */
 
     public Product(String name, String id, String description, String price, String stock) {
         this.name = name;
@@ -29,6 +37,10 @@ public class Product {
     }
 
    
+/**
+ * Gets the description of the product.
+ * @return The description of the product.
+ */
 
     public String getDescription() {
         return description;
@@ -37,7 +49,10 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
-
+/**
+ * Gets the price of the product.
+ * @return The price of the product.
+ */
     public String getPrice() {
         return price;
     }
@@ -45,7 +60,10 @@ public class Product {
     public void setPrice(String price) {
         this.price = price;
     }
-
+/**
+ * Gets the stock of the product.
+ * @return The stock of the product.
+ */
     public String getStock() {
         return stock;
     }
@@ -53,7 +71,10 @@ public class Product {
     public void setStock(String Stock) {
         this.stock = Stock;
     }
-
+/**
+ * Gets the id of the product.
+ * @return The id of the product.
+ */
     public String getId() {
         return id;
     }
@@ -61,7 +82,10 @@ public class Product {
     public void setId(String id) {
         this.id = id;
     }
-
+/**
+ * Gets the name of the product.
+ * @return The name of the product.
+ */
     public String getName() {
         return name;
     }

@@ -30,7 +30,7 @@ public class Vs_server {
             Logger.getLogger(Vs_server.class.getName()).log(Level.SEVERE, null, ex);
         }
         String sslRoute = p.getProperty("SSL_CERTIFICATE_ROUTE");
-        String sslPassword = p.getProperty("SSL_PASSWORD");
+        String sslPassword = p.getProperty("SSL_PASSWORD ");
         System.setProperty("javax.net.ssl.keyStore",sslRoute);
         System.setProperty("javax.net.ssl.keyStorePassword",sslPassword);
         System.setProperty("javax.net.ssl.keyStoreType", "PKCS12");
