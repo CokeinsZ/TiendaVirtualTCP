@@ -5,11 +5,13 @@
 package com.mycompany.vs_server.networkLayer;
 
 import com.mycompany.vs_server.inventory.InventoryManager;
+import com.mycompany.vs_server.inventory.Product;
 import com.mycompany.vs_server.logging.LogGenerator;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLSocket;
@@ -39,12 +41,17 @@ public class ClientHandler extends Thread {
             DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
 
+            // Enviar los primero 10 productos al conectarse
+            String initialProducts = buildProductsResponse(inventoryManager.getProductsPaginated(0, 10));
+            outputStream.writeUTF(initialProducts);
+            outputStream.flush();
+            
             while (true) {
                 String clientMessage;
                 try {
                     System.out.println("Esperando mensaje...");
                     clientMessage = inputStream.readUTF();
-                    
+                                        
                 } catch (IOException e) {
                     System.out.println("Cliente desconectado: " + clientIP);
                     break; // Salir del bucle cuando el cliente se desconecta
@@ -79,28 +86,102 @@ public class ClientHandler extends Thread {
     
     
     private String processCommand(String[] command, String clientIP) {
+        String response;
         try {
             switch (command[0].toUpperCase()) {
                 case "HI":
                     return "SUCCES:Hola " + clientIP;
                     
                 case "ADD":
-                    //Codigo para agregar un producto
-                    //Codigo para generar el log
-                    return "SUCCESS:Producto añadido";
+                    response = inventoryManager.addProduct(command[1], command[2], command[3], command[4], command[5]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "ADD", command[2]);
+                    
+                    return response;
                     
                 case "DELETE":
-                    //Codigo para eliminar un producto
-                    //Codigo para generar el log
-                    return "SUCCESS:Producto eliminado";
+                    response = inventoryManager.deleteProduct(command[1]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "DELETE", command[1]);
                     
-                // ... otros comandos (UPDATE, SEARCH, REPORT)
+                    return response;
+                    
+                case "UPDATE_NAME":
+                    response = inventoryManager.changeNameProuct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_NAME", command[1]);
+                    
+                    return response;
+                    
+                case "UPDATE_DESCRIPTION":
+                    response = inventoryManager.changeDescriptionProuct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_DESCRIPTION", command[1]);
+                    
+                    return response;
+                    
+                case "UPDATE_STOCK":
+                    response = inventoryManager.changeStockProduct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_STOCK", command[1]);
+                    
+                    return response;
+                    
+                case "UPDATE_PRICE":
+                    response = inventoryManager.changePriceProduct(command[1], command[2]);
+                    if (response.contains("SUCCES")) 
+                        logger.log(clientIP, "UPDATE_PRICE", command[1]);
+                    
+                    return response;
+                    
+                case "SEARCH_NAME":
+                    ArrayList<Product> foundProducts = inventoryManager.foundProductsbyName(command[1]);
+                    
+                    if (foundProducts != null) {
+                        response = buildProductsResponse(foundProducts);
+                        logger.log(clientIP, "UPDATE_NAME", command[1]);
+                    
+                    } else {
+                        response = "ERROR:No products found";
+                        
+                    }
+                    
+                    return response;
+                    
+                case "REPORT":
+                    return inventoryManager.generateReport();
+
+                case "LIST_PAGE":
+                    try {
+                        int page = Integer.parseInt(command[1]);
+                        ArrayList<Product> paginatedProducts = inventoryManager.getProductsPaginated(page, 10);
+                        
+                        if (paginatedProducts.isEmpty()) {
+                            return "ERROR:No more products available";
+                        }
+                        
+                        return buildProductsResponse(paginatedProducts);
+                    
+                    } catch (NumberFormatException e) {
+                        return "ERROR:Invalid page number";
+                    }
+
                 default:
                     return "ERROR:Comando no reconocido";
             }
         } catch (Exception e) {
             return "ERROR:" + e.getMessage();
         }
+    }
+
+    private String buildProductsResponse(ArrayList<Product> products) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (Product foundProduct : products) {
+            sb.append(foundProduct.toString());
+        }
+    
+        return sb.toString();
     }
     
     

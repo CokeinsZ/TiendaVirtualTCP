@@ -23,8 +23,6 @@ public class InventoryManager {
         this.productos = new ArrayList<>();
     }
     
-    
-
     public static synchronized InventoryManager getInstance() {
         //This method is used to obtain de unique instance of the function        
         if (instance == null) {
@@ -33,108 +31,116 @@ public class InventoryManager {
         return instance;
     }
     
+    
     /*this method adds a product for the array  */
-    public  synchronized void addProduct (String name,String id, String price, String stock, String description){
-        Product p = new Product( name,  id,  description,  price,  stock);     
-        productos.add(p);
-    }
-    /*this metodes deletes a product by id */
-    public synchronized void deleteProduct(String id){
-          Iterator<Product> iterator = productos.iterator();
-    while (iterator.hasNext()) {
-        Product product = iterator.next();
-        if (product.getId().equals(id)) {
-            iterator.remove();
-            System.out.println("Producto con la ID " + id + " ha sido borrado.");
-            return;
-        }
-    }
-    System.out.println("Producto con la ID " + id + " no encontrado.");
-    }
-    
-    public synchronized void changeNameProuct (String id, String name ){
-         Iterator<Product> iterator = productos.iterator();
-        while (iterator.hasNext()) {
-        Product product = iterator.next();
-        if (product.getId().equals(id)) {
-            product.setName(name);
-            System.out.println("Producto con la ID " + id + " ha sido borrado.");
-            return;
-        }
-            System.out.println("Producto con la ID " + id + " no encontrado.");
-
-        }
-    }
-    
-     public synchronized void changeDescriptionProuct (String id, String name ){
-         Iterator<Product> iterator = productos.iterator();
-        while (iterator.hasNext()) {
-        Product product = iterator.next();
-        if (product.getId().equals(id)) {
-            product.setName(name);
-            System.out.println("Producto con la ID " + id + " ha sido borrado.");
-            return;
-        }
-            System.out.println("Producto con la ID " + id + " no encontrado.");
-
+    public synchronized String addProduct (String name, String id, String price, String stock, String description){
+        if (foundProuct(id) != null) {
+            return "ERROR:Product with id: " + id + " already exist";
         }
         
-         
-     }
-     private synchronized Product foundProuct(String id){
-              Iterator<Product> iterator = productos.iterator();
+        Product p = new Product( name,  id,  description,  price,  stock);     
+        productos.add(p);
+        return("SUCCES:Product added");
+    }
+    
+    /*this metodes deletes a product by id */
+    public synchronized String deleteProduct(String id){
+        Iterator<Product> iterator = productos.iterator();
         while (iterator.hasNext()) {
-        Product product = iterator.next();
-        if (product.getId().equals(id)) {
-              System.out.println("Producto con la ID " + id + " ha sido encontrado.");
-            return product;
+            Product product = iterator.next();
+            if (product.getId().equals(id)) {
+                iterator.remove();
+                return "SUCCES:Product deleted";
+            }
         }
-         System.out.println("Producto con la ID " + id + " no encontrado.");
-       
-        } return null;
+        
+        return "ERROR:Product with ID " + id + " not found.";
+    }
+    
+    public synchronized String changeNameProuct (String id, String name ){
+        Iterator<Product> iterator = productos.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getId().equals(id)) {
+                product.setName(name);
+                return "SUCCES:Product name changed";
+            }
         }
+        
+        return "ERROR:Product with ID: " + id + " not found";
+    }
+    
+    public synchronized String changeDescriptionProuct (String id, String description ){
+        Iterator<Product> iterator = productos.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getId().equals(id)) {
+                product.setDescription(description);
+                return "SUCCES:Description updated";
+            }
+        }
+        
+        return "ERROR:Product with ID: " + id + " not found";
+    }
+    
+    private synchronized Product foundProuct(String id){
+        Iterator<Product> iterator = productos.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getId().equals(id)) {
+                System.out.println("Producto con la ID " + id + " ha sido encontrado.");
+                return product;
+            }
+        }
+        
+        return null;
+    }
      
-     public synchronized void changepriceProduct(String id, String price){
-         Product product = foundProuct(id);
-         product.setPrice(price);
-               
+    public synchronized String changePriceProduct(String id, String price){
+        Product product = foundProuct(id);
+        if (product != null) {
+            product.setPrice(price);
+            return "SUCCES:Product price updated";
+        }
+        
+        return "ERROR:Product with ID: " + id + " not found";               
     }
      
      
-      public synchronized void changeStockProduct(String id, String stock){
-         Product product = foundProuct(id);
-         product.setPrice(stock);
-               
+    public synchronized String changeStockProduct(String id, String stock){
+        Product product = foundProuct(id);
+        if (product != null) {
+            product.setPrice(stock);
+            return "SUCCES:Product price updated";
+        }
+        
+        return "ERROR:Product with ID: " + id + " not found";
     }
      
-      public synchronized String foundIdProductsbyName (String name){
-              Iterator<Product> iterator = productos.iterator();
+    public synchronized ArrayList<Product> foundProductsbyName (String name){
+        Iterator<Product> iterator = productos.iterator();
+        ArrayList<Product> productsFound = new ArrayList<>();
+        
         while (iterator.hasNext()) {
-        Product product = iterator.next();
-        if (product.getId().equals(name)) {
-              System.out.println("Producto con el Nombre " + name + " ha sido encontrado.");
-            return product.getId();
+            Product product = iterator.next();
+            if (product.getName().contains(name)) {
+               productsFound.add(product);
+            }
         }
-         System.out.println("Producto con el nombre " + name  + " no encontrado.");
-       
-        } return null;
+        
+        if (productsFound.isEmpty()) {
+            return null;
         }
+        
+        return productsFound;
+    }
       
-       public void generateCSVReport(String fileName) {
+    public void generateCSVReport(String fileName) {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.append("ID,Name,Description,Price,Stock\n");  // columnas del csv
 
             for (Product product : productos) {
-                writer.append(product.getId())
-                      .append(",")
-                      .append(product.getName())
-                      .append(",")
-                      .append(product.getDescription())
-                      .append(",")
-                      .append(product.getPrice())
-                      .append(",")
-                      .append(product.getStock())
-                      .append("\n");
+                writer.append(product.toString());
             }
 
             System.out.println("CSV report generated successfully!");
@@ -142,28 +148,33 @@ public class InventoryManager {
         } catch (IOException e) {
             System.err.println("Error while generating CSV report: " + e.getMessage());
         }
-       }
-        public String generateReport() {
-        String writer="" ;
-            writer= writer+("ID,Name,Description,Price,Stock\n");  // columnas del csv
-
-            for (Product product : productos) {
-                writer=writer +
-                      (product.getId())
-                      +(",")
-                      +(product.getName())
-                      +(",")
-                      +(product.getDescription())
-                      +(",")
-                      +(product.getPrice())
-                      +(",")
-                      +(product.getStock())
-                      +("\n");
-            }
-
-            System.out.println(" reporte generado");
-            return writer;
-        }
     }
+    
+    public String generateReport() {
+        String writer= "";
+        writer = writer + ("ID,Name,Description,Price,Stock\n");  // columnas del csv
+
+        for (Product product : productos) {
+            writer = writer + product.toString();                      
+        }
+
+        System.out.println(" reporte generado");
+        return writer;
+    }
+    
+    public ArrayList<Product> getProductsPaginated(int page, int pageSize) {
+        int totalProducts = productos.size();
+
+        int fromIndex = page * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, totalProducts);
+
+        if (fromIndex >= totalProducts) {
+            return new ArrayList<>(); // No hay más productos
+        }
+
+        return new ArrayList<Product>(productos.subList(fromIndex, toIndex));
+    }
+
+}
 
             
